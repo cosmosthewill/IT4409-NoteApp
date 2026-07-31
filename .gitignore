@@ -40,7 +40,6 @@ build/
 # Working documents and course material kept out of the public repository
 plan.md
 report.md
-deploy.yaml
 DEPLOY.md
 claude-deploy-vps.md
 docs/FINAL_SUBMISSION.md

@@ -7,6 +7,8 @@ services:
       POSTGRES_DB: ${DB_NAME:-note_app}
       POSTGRES_USER: ${DB_USERNAME:-note_user}
       POSTGRES_PASSWORD: ${DB_PASSWORD:?Set DB_PASSWORD in .env}
+    ports:
+      - "127.0.0.1:5433:5432"
     volumes:
       - note_app_data:/var/lib/postgresql/data
     healthcheck:
