@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="flashMessages" class="flash-container container" aria-live="polite">
+    <div th:if="${successMessage}"
+         class="alert alert-success alert-dismissible fade show shadow-sm"
+         role="alert">
+        <i class="bi bi-check-circle-fill me-2"></i>
+        <span th:text="${#messages.msg(successMessage)}">Thành công</span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,8 @@
+target
+.git
+.idea
+.env
+*.iml
+*.log
+plan.md
+20252 - IT4409 - De thi cuoi ky.pdf

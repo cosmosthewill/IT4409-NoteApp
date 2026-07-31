@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:lang="${#locale.language}">
+<head th:replace="~{fragments/head :: head(${formMode == 'create'} ? #{page.note.new.title} : #{page.note.edit.title})}"></head>
+<body class="d-flex flex-column min-vh-100 notes-page">
+<nav th:replace="~{fragments/navbar :: navbar}"></nav>
+
+<main class="flex-grow-1 py-4 py-lg-5">
+    <div class="container">
+        <div class="form-shell mx-auto">
+            <a class="back-link" th:href="${formMode == 'edit'} ? @{/notes/{id}(id=${note.id})} : @{/notes}">
+                <i class="bi bi-arrow-left me-2"></i>
+                <span th:text="#{note.backToList}">Quay lại</span>
+            </a>
+
+            <header class="my-4">
+                <h1 class="display-6 fw-bold mb-2"
+                    th:text="${formMode == 'create'} ? #{note.createHeading} : #{note.editHeading}">
+                    Tạo ghi chú
+                </h1>
+                <p class="text-body-secondary mb-0"
+                   th:text="${formMode == 'create'} ? #{note.createSubtitle} : #{note.editSubtitle}">
+                    Ghi lại ý tưởng.
+                </p>
+            </header>
+
+            <form class="note-form-card"
+                  th:action="${formMode == 'create'} ? @{/notes} : @{/notes/{id}(id=${note.id})}"
+                  th:object="${noteForm}"
+                  method="post"
+                  novalidate>
+                <div class="mb-4">
+                    <label for="title" class="form-label fw-semibold" th:text="#{note.title}">Tiêu đề</label>
+                    <input id="title"
+                           type="text"
+                           class="form-control form-control-lg"
+                           th:errorclass="is-invalid"
+                           th:field="*{title}"
+                           maxlength="150"
+                           autofocus
+                           th:placeholder="#{note.titlePlaceholder}">
+                    <div class="invalid-feedback" th:errors="*{title}"></div>
+                </div>
+
+                <div class="mb-4">
+                    <label for="category" class="form-label fw-semibold" th:text="#{note.category}">
+                        Danh mục
+                    </label>
+                    <select id="category"
+                            class="form-select form-select-lg"
+                            th:errorclass="is-invalid"
+                            th:field="*{category}">
+                        <option value="" th:text="#{note.categoryPlaceholder}">Chọn danh mục</option>
+                        <option th:each="category : ${categories}"
+                                th:value="${category.name()}"
+                                th:text="${#messages.msg('category.' + category.name())}">
+                            Cá nhân
+                        </option>
+                    </select>
+                    <div class="invalid-feedback" th:errors="*{category}"></div>
+                </div>
+
+                <div class="mb-4">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <label for="content" class="form-label fw-semibold" th:text="#{note.content}">Nội dung</label>
+                        <span id="content-counter" class="small text-body-secondary">0 / 10000</span>
+                    </div>
+                    <textarea id="content"
+                              class="form-control note-content-input"
+                              th:errorclass="is-invalid"
+                              th:field="*{content}"
+                              maxlength="10000"
+                              rows="12"
+                              th:placeholder="#{note.contentPlaceholder}"></textarea>
+                    <div class="invalid-feedback" th:errors="*{content}"></div>
+                </div>
+
+                <div class="d-flex flex-column-reverse flex-sm-row justify-content-end gap-2">
+                    <a class="btn btn-light btn-lg px-4"
+                       th:href="${formMode == 'edit'} ? @{/notes/{id}(id=${note.id})} : @{/notes}"
+                       th:text="#{note.cancel}">
+                        Hủy
+                    </a>
+                    <button class="btn btn-primary btn-lg px-4" type="submit">
+                        <i class="bi bi-check2 me-2"></i>
+                        <span th:text="${formMode == 'create'} ? #{note.save} : #{note.update}">Lưu</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</main>
+
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+<script th:src="@{/js/note-form.js}" defer></script>
+</body>
+</html>

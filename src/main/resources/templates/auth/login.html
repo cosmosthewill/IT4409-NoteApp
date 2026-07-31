@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:lang="${#locale.language}">
+<head th:replace="~{fragments/head :: head(#{page.login.title})}"></head>
+<body class="d-flex flex-column min-vh-100 auth-page">
+<nav th:replace="~{fragments/navbar :: navbar}"></nav>
+
+<main class="flex-grow-1 d-flex align-items-center py-5">
+    <div class="container">
+        <div class="auth-shell mx-auto">
+            <div class="auth-heading text-center mb-4">
+                <span class="auth-icon"><i class="bi bi-person-check"></i></span>
+                <h1 class="h2 mt-3 mb-2" th:text="#{auth.welcomeBack}">Chào mừng bạn trở lại</h1>
+                <p class="text-body-secondary" th:text="#{auth.loginSubtitle}"></p>
+            </div>
+
+            <div class="alert alert-danger" role="alert" th:if="${param.error}">
+                <i class="bi bi-exclamation-circle me-2"></i>
+                <span th:text="#{auth.loginError}">Thông tin đăng nhập không đúng.</span>
+            </div>
+            <div class="alert alert-success" role="alert" th:if="${param.registered}">
+                <i class="bi bi-check-circle me-2"></i>
+                <span th:text="#{auth.registered}">Tạo tài khoản thành công.</span>
+            </div>
+            <div class="alert alert-info" role="alert" th:if="${param.logout}">
+                <i class="bi bi-info-circle me-2"></i>
+                <span th:text="#{auth.loggedOut}">Bạn đã đăng xuất.</span>
+            </div>
+
+            <form class="auth-card" th:action="@{/login}" method="post">
+                <div class="mb-3">
+                    <label for="username" class="form-label fw-semibold" th:text="#{auth.username}">
+                        Tên đăng nhập
+                    </label>
+                    <div class="input-group input-group-lg">
+                        <span class="input-group-text"><i class="bi bi-person"></i></span>
+                        <input id="username"
+                               name="username"
+                               type="text"
+                               class="form-control"
+                               autocomplete="username"
+                               autofocus
+                               required
+                               th:placeholder="#{auth.usernamePlaceholder}">
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <label for="password" class="form-label fw-semibold" th:text="#{auth.password}">Mật khẩu</label>
+                    <div class="input-group input-group-lg">
+                        <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                        <input id="password"
+                               name="password"
+                               type="password"
+                               class="form-control"
+                               autocomplete="current-password"
+                               required
+                               th:placeholder="#{auth.passwordPlaceholder}">
+                    </div>
+                </div>
+                <button class="btn btn-primary btn-lg w-100" type="submit">
+                    <span th:text="#{auth.loginAction}">Đăng nhập</span>
+                    <i class="bi bi-arrow-right ms-2"></i>
+                </button>
+            </form>
+
+            <p class="text-center text-body-secondary mt-4 mb-0">
+                <span th:text="#{auth.noAccount}">Chưa có tài khoản?</span>
+                <a class="fw-semibold link-primary text-decoration-none ms-1"
+                   th:href="@{/register}"
+                   th:text="#{auth.registerNow}">Đăng ký ngay</a>
+            </p>
+        </div>
+    </div>
+</main>
+
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+</body>
+</html>

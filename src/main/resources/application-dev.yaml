@@ -1,0 +1,11 @@
+spring:
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/note_app}
+    username: ${DB_USERNAME:note_user}
+    password: ${DB_PASSWORD:note_password}
+  thymeleaf:
+    cache: false
+
+logging:
+  level:
+    ziang.com.it4409.noteapp: DEBUG

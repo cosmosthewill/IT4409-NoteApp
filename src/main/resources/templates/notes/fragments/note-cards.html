@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="noteCards(notesPage)"
+     class="notes-fragment row g-4"
+     th:attr="data-page=${notesPage.number},data-has-next=${notesPage.hasNext()}">
+    <div class="note-card-column col-12 col-md-6 col-xl-4"
+         th:each="note : ${notesPage.content}">
+        <article class="note-card h-100" th:classappend="${note.pinned} ? ' note-card-pinned' : ''">
+            <div class="d-flex align-items-start justify-content-between gap-3">
+                <span class="category-badge"
+                      th:classappend="${' category-' + #strings.toLowerCase(note.category.name())}"
+                      th:text="${#messages.msg('category.' + note.category.name())}">
+                    Cá nhân
+                </span>
+                <form th:action="@{/notes/{id}/pin(id=${note.id})}" method="post">
+                    <button type="submit"
+                            class="pin-button"
+                            th:classappend="${note.pinned} ? ' active' : ''"
+                            th:title="${note.pinned} ? #{note.unpin} : #{note.pin}"
+                            th:aria-label="${note.pinned} ? #{note.unpin} : #{note.pin}">
+                        <i class="bi" th:classappend="${note.pinned} ? ' bi-pin-angle-fill' : ' bi-pin-angle'"></i>
+                    </button>
+                </form>
+            </div>
+
+            <div class="note-card-body">
+                <h2 class="note-card-title h5">
+                    <a th:href="@{/notes/{id}(id=${note.id})}" th:text="${note.title}">Tiêu đề</a>
+                </h2>
+                <p class="note-card-preview" th:text="${note.content}">Nội dung ghi chú</p>
+            </div>
+
+            <div class="note-card-footer">
+                <span class="small text-body-secondary">
+                    <i class="bi bi-clock me-1"></i>
+                    <span th:text="#{notes.updated}">Cập nhật</span>
+                    <time th:datetime="${note.updatedAt}"
+                          th:text="${#temporals.format(note.updatedAt, 'dd/MM/yyyy HH:mm')}">
+                        31/07/2026 09:00
+                    </time>
+                </span>
+                <div class="note-actions">
+                    <a class="btn btn-sm btn-quiet"
+                       th:href="@{/notes/{id}(id=${note.id})}"
+                       th:title="#{nav.notes}">
+                        <i class="bi bi-eye"></i>
+                    </a>
+                    <a class="btn btn-sm btn-quiet"
+                       th:href="@{/notes/{id}/edit(id=${note.id})}"
+                       th:title="#{note.edit}">
+                        <i class="bi bi-pencil"></i>
+                    </a>
+                    <button type="button"
+                            class="btn btn-sm btn-quiet text-danger"
+                            data-delete-note
+                            th:attr="data-delete-url=@{/notes/{id}/delete(id=${note.id})},data-note-title=${note.title}"
+                            th:title="#{note.delete}">
+                        <i class="bi bi-trash3"></i>
+                    </button>
+                </div>
+            </div>
+        </article>
+    </div>
+</div>
+</body>
+</html>

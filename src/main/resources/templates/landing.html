@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:lang="${#locale.language}">
+<head th:replace="~{fragments/head :: head(#{page.landing.title})}"></head>
+<body class="d-flex flex-column min-vh-100 landing-page">
+<nav th:replace="~{fragments/navbar :: navbar}"></nav>
+
+<main class="flex-grow-1">
+    <section class="hero-section">
+        <div class="hero-orb hero-orb-one"></div>
+        <div class="hero-orb hero-orb-two"></div>
+        <div class="container position-relative">
+            <div class="row align-items-center gy-5 py-5">
+                <div class="col-lg-6">
+                    <div class="hero-copy">
+                        <span class="eyebrow">
+                            <i class="bi bi-stars me-2"></i>
+                            <span th:text="#{landing.eyebrow}">Không gian ghi chú cá nhân</span>
+                        </span>
+                        <h1 class="display-3 fw-bold mt-4 mb-4" th:text="#{landing.heading}">
+                            Mọi ý tưởng đều có một nơi để bắt đầu.
+                        </h1>
+                        <p class="lead text-body-secondary mb-4" th:text="#{landing.description}">
+                            Tạo, sắp xếp và tìm lại những điều quan trọng.
+                        </p>
+                        <div class="d-flex flex-column flex-sm-row gap-3">
+                            <a class="btn btn-primary btn-lg rounded-pill px-4" th:href="@{/register}">
+                                <span th:text="#{landing.primaryAction}">Bắt đầu miễn phí</span>
+                                <i class="bi bi-arrow-right ms-2"></i>
+                            </a>
+                            <a class="btn btn-outline-secondary btn-lg rounded-pill px-4" th:href="@{/login}"
+                               th:text="#{landing.secondaryAction}">
+                                Tôi đã có tài khoản
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6">
+                    <div class="hero-preview-wrap">
+                        <div class="preview-glow"></div>
+                        <article class="hero-note-card">
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <span class="text-body-secondary small" th:text="#{landing.preview.today}">Hôm nay</span>
+                                <span class="pin-bubble"><i class="bi bi-pin-angle-fill"></i></span>
+                            </div>
+                            <span class="category-badge category-study mb-3"
+                                  th:text="#{landing.preview.category}">Học tập</span>
+                            <h2 class="h3 mt-3" th:text="#{landing.preview.title}">Ý tưởng cho đồ án Web</h2>
+                            <p class="text-body-secondary mt-3 mb-5" th:text="#{landing.preview.content}">
+                                Hoàn thiện giao diện responsive...
+                            </p>
+                            <div class="d-flex align-items-center justify-content-between">
+                                <span class="small text-body-secondary">
+                                    <i class="bi bi-clock me-1"></i>
+                                    <span th:text="#{landing.preview.updated}">Vừa cập nhật</span>
+                                </span>
+                                <div class="preview-lines" aria-hidden="true"><span></span><span></span><span></span></div>
+                            </div>
+                        </article>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="feature-section pb-5">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <article class="feature-card h-100">
+                        <span class="feature-icon"><i class="bi bi-shield-check"></i></span>
+                        <h2 class="h5 mt-4" th:text="#{landing.feature.private.title}">Riêng tư</h2>
+                        <p class="text-body-secondary mb-0" th:text="#{landing.feature.private.text}"></p>
+                    </article>
+                </div>
+                <div class="col-md-4">
+                    <article class="feature-card h-100">
+                        <span class="feature-icon"><i class="bi bi-search"></i></span>
+                        <h2 class="h5 mt-4" th:text="#{landing.feature.organized.title}">Gọn gàng</h2>
+                        <p class="text-body-secondary mb-0" th:text="#{landing.feature.organized.text}"></p>
+                    </article>
+                </div>
+                <div class="col-md-4">
+                    <article class="feature-card h-100">
+                        <span class="feature-icon"><i class="bi bi-phone"></i></span>
+                        <h2 class="h5 mt-4" th:text="#{landing.feature.anywhere.title}">Mọi nơi</h2>
+                        <p class="text-body-secondary mb-0" th:text="#{landing.feature.anywhere.text}"></p>
+                    </article>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+</body>
+</html>

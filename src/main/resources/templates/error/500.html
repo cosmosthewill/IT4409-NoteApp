@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:lang="${#locale.language}">
+<head th:replace="~{fragments/head :: head(#{page.error.500.title})}"></head>
+<body class="d-flex flex-column min-vh-100 error-page">
+<nav th:replace="~{fragments/navbar :: navbar}"></nav>
+<main class="flex-grow-1 d-flex align-items-center py-5">
+    <div class="container text-center">
+        <div class="error-code">500</div>
+        <span class="error-icon"><i class="bi bi-cloud-slash"></i></span>
+        <h1 class="h2 mt-4" th:text="#{error.500.heading}">Đã xảy ra lỗi</h1>
+        <p class="text-body-secondary error-copy mx-auto" th:text="#{error.500.text}"></p>
+        <a class="btn btn-primary rounded-pill px-4" th:href="@{/}">
+            <i class="bi bi-house me-2"></i><span th:text="#{error.home}">Trang chủ</span>
+        </a>
+    </div>
+</main>
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+</body>
+</html>

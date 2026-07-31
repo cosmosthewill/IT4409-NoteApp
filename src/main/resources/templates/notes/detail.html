@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:lang="${#locale.language}">
+<head th:replace="~{fragments/head :: head(${note.title})}"></head>
+<body class="d-flex flex-column min-vh-100 notes-page">
+<nav th:replace="~{fragments/navbar :: navbar}"></nav>
+<div th:replace="~{fragments/flash-messages :: flashMessages}"></div>
+
+<main class="flex-grow-1 py-4 py-lg-5">
+    <div class="container">
+        <div class="detail-shell mx-auto">
+            <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+                <a class="back-link" th:href="@{/notes}">
+                    <i class="bi bi-arrow-left me-2"></i>
+                    <span th:text="#{note.backToList}">Quay lại</span>
+                </a>
+                <div class="d-flex gap-2">
+                    <form th:action="@{/notes/{id}/pin(id=${note.id})}" method="post">
+                        <button class="btn btn-outline-secondary" type="submit">
+                            <i class="bi me-1"
+                               th:classappend="${note.pinned} ? ' bi-pin-angle-fill' : ' bi-pin-angle'"></i>
+                            <span th:text="${note.pinned} ? #{note.unpin} : #{note.pin}">Ghim</span>
+                        </button>
+                    </form>
+                    <a class="btn btn-primary" th:href="@{/notes/{id}/edit(id=${note.id})}">
+                        <i class="bi bi-pencil me-1"></i>
+                        <span th:text="#{note.edit}">Chỉnh sửa</span>
+                    </a>
+                    <button class="btn btn-outline-danger"
+                            type="button"
+                            data-delete-note
+                            th:attr="data-delete-url=@{/notes/{id}/delete(id=${note.id})},data-note-title=${note.title}">
+                        <i class="bi bi-trash3 me-1"></i>
+                        <span th:text="#{note.delete}">Xóa</span>
+                    </button>
+                </div>
+            </div>
+
+            <article class="note-detail-card">
+                <div class="d-flex flex-wrap align-items-center gap-2 mb-4">
+                    <span class="category-badge"
+                          th:classappend="${' category-' + #strings.toLowerCase(note.category.name())}"
+                          th:text="${#messages.msg('category.' + note.category.name())}">
+                        Cá nhân
+                    </span>
+                    <span th:if="${note.pinned}" class="pinned-label">
+                        <i class="bi bi-pin-angle-fill me-1"></i>
+                        <span th:text="#{note.pinned}">Đã ghim</span>
+                    </span>
+                </div>
+
+                <h1 class="detail-title" th:text="${note.title}">Tiêu đề ghi chú</h1>
+                <div class="detail-content" th:text="${note.content}">Nội dung ghi chú</div>
+
+                <footer class="detail-meta">
+                    <div>
+                        <span class="meta-label" th:text="#{note.createdAt}">Ngày tạo</span>
+                        <time th:datetime="${note.createdAt}"
+                              th:text="${#temporals.format(note.createdAt, 'dd/MM/yyyy HH:mm')}"></time>
+                    </div>
+                    <div>
+                        <span class="meta-label" th:text="#{note.updatedAt}">Cập nhật</span>
+                        <time th:datetime="${note.updatedAt}"
+                              th:text="${#temporals.format(note.updatedAt, 'dd/MM/yyyy HH:mm')}"></time>
+                    </div>
+                </footer>
+            </article>
+        </div>
+    </div>
+</main>
+
+<div th:replace="~{fragments/delete-modal :: deleteModal}"></div>
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+<script th:src="@{/js/delete-confirmation.js}" defer></script>
+</body>
+</html>

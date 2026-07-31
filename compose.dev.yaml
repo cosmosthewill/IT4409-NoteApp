@@ -1,0 +1,23 @@
+name: note-app-dev
+
+services:
+  postgres:
+    image: postgres:17-alpine
+    container_name: note-app-postgres-dev
+    environment:
+      POSTGRES_DB: ${DB_NAME:-note_app}
+      POSTGRES_USER: ${DB_USERNAME:-note_user}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-note_password}
+    ports:
+      - "127.0.0.1:${DB_PORT:-5432}:5432"
+    volumes:
+      - note_app_dev_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+volumes:
+  note_app_dev_data:

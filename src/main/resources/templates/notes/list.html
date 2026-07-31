@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:lang="${#locale.language}">
+<head th:replace="~{fragments/head :: head(#{page.notes.title})}"></head>
+<body class="d-flex flex-column min-vh-100 notes-page">
+<nav th:replace="~{fragments/navbar :: navbar}"></nav>
+<div th:replace="~{fragments/flash-messages :: flashMessages}"></div>
+
+<main id="notes-app"
+      class="flex-grow-1 py-4 py-lg-5"
+      th:attr="data-empty-title=#{notes.emptyTitle},
+               data-empty-text=#{notes.emptyText},
+               data-no-results-title=#{notes.noResultsTitle},
+               data-no-results-text=#{notes.noResultsText},
+               data-load-error=#{notes.loadError}">
+    <div class="container">
+        <header class="d-flex flex-column flex-md-row align-items-md-end justify-content-between gap-3 mb-4">
+            <div>
+                <span class="eyebrow eyebrow-compact">
+                    <i class="bi bi-journals me-2"></i>
+                    <span th:text="#{app.name}">Ghi Chú</span>
+                </span>
+                <h1 class="display-6 fw-bold mt-3 mb-2" th:text="#{notes.heading}">Ghi chú của tôi</h1>
+                <p class="text-body-secondary mb-0" th:text="#{notes.subtitle}"></p>
+            </div>
+            <a class="btn btn-primary rounded-pill px-4 align-self-start align-self-md-auto"
+               th:href="@{/notes/new}">
+                <i class="bi bi-plus-lg me-2"></i>
+                <span th:text="#{notes.newAction}">Tạo ghi chú</span>
+            </a>
+        </header>
+
+        <section class="filter-panel mb-4" aria-labelledby="filterHeading">
+            <h2 class="visually-hidden" id="filterHeading" th:text="#{notes.searchLabel}">Tìm kiếm</h2>
+            <form id="notes-filter-form" th:action="@{/notes}" method="get">
+                <div class="row g-3 align-items-end">
+                    <div class="col-lg-8">
+                        <label for="note-search" class="form-label small fw-semibold"
+                               th:text="#{notes.searchLabel}">Tìm kiếm ghi chú</label>
+                        <div class="search-control">
+                            <i class="bi bi-search" aria-hidden="true"></i>
+                            <input id="note-search"
+                                   name="q"
+                                   type="search"
+                                   class="form-control form-control-lg"
+                                   autocomplete="off"
+                                   th:value="${query}"
+                                   th:placeholder="#{notes.searchPlaceholder}">
+                            <span id="search-spinner"
+                                  class="spinner-border spinner-border-sm d-none"
+                                  role="status"
+                                  th:aria-label="#{notes.loading}"></span>
+                        </div>
+                    </div>
+                    <div class="col-sm-8 col-lg-3">
+                        <label for="category-filter" class="form-label small fw-semibold"
+                               th:text="#{notes.categoryLabel}">Danh mục</label>
+                        <select id="category-filter" name="category" class="form-select form-select-lg">
+                            <option value="" th:selected="${selectedCategory == null}"
+                                    th:text="#{notes.allCategories}">Tất cả</option>
+                            <option th:each="category : ${categories}"
+                                    th:value="${category.name()}"
+                                    th:selected="${selectedCategory == category}"
+                                    th:text="${#messages.msg('category.' + category.name())}">
+                                Cá nhân
+                            </option>
+                        </select>
+                    </div>
+                    <div class="col-sm-4 col-lg-1 d-grid">
+                        <button class="btn btn-outline-secondary btn-lg filter-submit" type="submit"
+                                th:title="#{notes.filterAction}">
+                            <i class="bi bi-funnel"></i>
+                            <span class="visually-hidden" th:text="#{notes.filterAction}">Lọc</span>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </section>
+
+        <div id="results-status" class="visually-hidden" aria-live="polite"></div>
+
+        <section id="note-grid" aria-live="polite">
+            <div th:replace="~{notes/fragments/note-cards :: noteCards(${notesPage})}"></div>
+        </section>
+
+        <section id="empty-state"
+                 class="empty-state text-center"
+                 th:classappend="${!notesPage.empty} ? ' d-none' : ''">
+            <span class="empty-icon"><i class="bi bi-journal-plus"></i></span>
+            <h2 id="empty-state-title" class="h4 mt-4"
+                th:text="${#strings.isEmpty(query) and selectedCategory == null} ? #{notes.emptyTitle} : #{notes.noResultsTitle}">
+                Chưa có ghi chú nào
+            </h2>
+            <p id="empty-state-text" class="text-body-secondary mx-auto"
+               th:text="${#strings.isEmpty(query) and selectedCategory == null} ? #{notes.emptyText} : #{notes.noResultsText}">
+                Tạo ghi chú đầu tiên.
+            </p>
+            <a id="empty-create-action"
+               class="btn btn-primary rounded-pill px-4"
+               th:classappend="${!#strings.isEmpty(query) or selectedCategory != null} ? ' d-none' : ''"
+               th:href="@{/notes/new}">
+                <i class="bi bi-plus-lg me-2"></i>
+                <span th:text="#{notes.newAction}">Tạo ghi chú</span>
+            </a>
+        </section>
+
+        <section id="load-error" class="alert alert-danger text-center d-none mt-4" role="alert">
+            <i class="bi bi-wifi-off me-2"></i>
+            <span th:text="#{notes.loadError}">Không thể tải ghi chú.</span>
+            <button id="retry-load" type="button" class="btn btn-link alert-link p-0 ms-2"
+                    th:text="#{notes.retry}">Thử lại</button>
+        </section>
+
+        <div id="loading-indicator" class="loading-indicator d-none" aria-live="polite">
+            <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+            <span th:text="#{notes.loading}">Đang tải...</span>
+        </div>
+
+        <div id="load-more-wrap"
+             class="text-center mt-4"
+             th:classappend="${!notesPage.hasNext()} ? ' d-none' : ''">
+            <button id="load-more" type="button" class="btn btn-outline-primary rounded-pill px-4"
+                    th:text="#{notes.loadMore}">Xem thêm</button>
+        </div>
+        <div id="scroll-sentinel" class="scroll-sentinel" aria-hidden="true"></div>
+    </div>
+</main>
+
+<div th:replace="~{fragments/delete-modal :: deleteModal}"></div>
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+<script th:src="@{/js/delete-confirmation.js}" defer></script>
+<script th:src="@{/js/notes.js}" defer></script>
+</body>
+</html>
