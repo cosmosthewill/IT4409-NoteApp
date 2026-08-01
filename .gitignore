@@ -36,11 +36,3 @@ build/
 # Local environment and generated application data
 .env
 *.log
-
-# Working documents and course material kept out of the public repository
-plan.md
-report.md
-DEPLOY.md
-claude-deploy-vps.md
-docs/FINAL_SUBMISSION.md
-*.pdf
